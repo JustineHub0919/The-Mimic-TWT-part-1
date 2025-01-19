@@ -1,0 +1,153 @@
+local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/JustineHub0919/RedzLibV5/9909af942a3dad3b104071f35957211351b941be/Source.lua"))()
+
+local Window = redzlib:MakeWindow({"Justine Hub | The Mimic TWT", "by Justine", "JustineHubTWT.json"})
+Window:AddMinimizeButton({
+    Button = { 
+        Image = redzlib:GetIcon("rbxassetid://100207705802786"), 
+        Size = UDim2.fromOffset(60, 60),
+        BackgroundTransparency = 0 
+    },
+    Corner = { CornerRadius = UDim.new(0, 6) }
+})
+
+local Main = Window:MakeTab({"Main", "home"})
+
+Main:AddSection({"Fulbright"})
+
+local Lighting = game:GetService("Lighting")
+
+-- FullBright Toggle Function
+local function ToggleFullBright(enabled)
+    if enabled then
+        Lighting.Brightness = 2
+        Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+        Lighting.Ambient = Color3.new(1, 1, 1)
+        print("FullBright enabled")
+    else
+        Lighting.Brightness = 1
+        Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+        Lighting.Ambient = Color3.new(0.5, 0.5, 0.5)
+        print("FullBright disabled")
+    end
+end
+
+-- FullBright Toggle
+Main:AddToggle({
+    Name = "FullBright",
+    Description = "",
+    Flag = "FullBrightToggle",
+    Default = false,
+    Callback = function(Value)
+        ToggleFullBright(Value)
+    end
+})
+
+Main:AddSection({"ESP Monster"})
+
+-- ESP Functionality
+local espEnabled = false
+local espHighlights = {}
+local espConnections = {}
+
+local function createESP(npc)
+    if npc:FindFirstChild("Humanoid") and not game.Players:GetPlayerFromCharacter(npc) then
+        local highlight = Instance.new("Highlight")
+        highlight.Adornee = npc
+        highlight.FillColor = Color3.new(1, 0, 0)
+        highlight.FillTransparency = 0.5
+        highlight.OutlineColor = Color3.new(1, 1, 1)
+        highlight.OutlineTransparency = 0
+        highlight.Parent = npc
+        espHighlights[npc] = highlight
+    end
+end
+
+local function removeESP(npc)
+    if espHighlights[npc] then
+        espHighlights[npc]:Destroy()
+        espHighlights[npc] = nil
+    end
+end
+
+local function toggleESP(isEnabled)
+    espEnabled = isEnabled
+
+    if espEnabled then
+        -- Apply ESP to existing NPCs
+        for _, npc in ipairs(workspace:GetChildren()) do
+            if npc:IsA("Model") and npc:FindFirstChild("Humanoid") then
+                createESP(npc)
+            end
+        end
+
+        -- Connect events to dynamically handle new or removed NPCs
+        espConnections["ChildAdded"] = workspace.ChildAdded:Connect(function(npc)
+            if npc:IsA("Model") and npc:FindFirstChild("Humanoid") then
+                createESP(npc)
+            end
+        end)
+
+        espConnections["ChildRemoved"] = workspace.ChildRemoved:Connect(function(npc)
+            removeESP(npc)
+        end)
+    else
+        -- Remove all ESP highlights
+        for npc, _ in pairs(espHighlights) do
+            removeESP(npc)
+        end
+
+        -- Disconnect all events to stop monitoring
+        for _, connection in pairs(espConnections) do
+            connection:Disconnect()
+        end
+
+        -- Reset the connections table after disconnection
+        espConnections = {}
+    end
+end
+
+-- ESP Toggle
+Main:AddToggle({
+    Name = "ESP",
+    Description = "",
+    Flag = "ESPToggle",
+    Default = false,
+    Callback = function(Value)
+        toggleESP(Value)
+    end
+})
+
+Main:AddSection({"Infinite Stamina"})
+
+-- Infinite Stamina Button
+Main:AddButton({
+    Name = "Infinite Stamina", 
+    Description = "",
+    Callback = function()
+        -- Infinite Stamina Effect (Speed Boost)
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+
+        local humanoid = character:WaitForChild("Humanoid")
+        humanoid.WalkSpeed = 25 -- Set WalkSpeed to 25
+
+        print("Infinite Stamina Activated: Speed set to 25")
+    end
+})
+
+local Game = Window:MakeTab({"Auto Win", "Game"})
+
+-- Auto Win Button
+Game:AddButton({
+    Name = "Auto Win", 
+    Description = "",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+
+        local targetPosition = Vector3.new(2530, 6, -1184)  -- Set the target position
+        character:SetPrimaryPartCFrame(CFrame.new(targetPosition))  -- Teleport the player
+
+        print("Auto Win: Teleported to", targetPosition)
+    end
+})
