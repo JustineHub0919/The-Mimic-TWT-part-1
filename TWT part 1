@@ -151,3 +151,102 @@ Game:AddButton({
         print("Auto Win: Teleported to", targetPosition)
     end
 })
+
+-- Create the "Easter Egg" tab
+local EasterEggTab = Window:MakeTab({"Easter Egg", "Star"})
+
+-- Add a section in the "Easter Egg" tab
+EasterEggTab:AddSection({Name = "Control | Sama"})
+
+-- Add the "Sama" button in the "Easter Egg" tab
+EasterEggTab:AddButton({
+    Name = "Sama",
+    Description = "",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:WaitForChild("HumanoidRootPart")
+        
+        -- Teleport position
+        local teleportPosition = Vector3.new(1337, 4, -47)
+        
+        -- Teleport the player
+        hrp.CFrame = CFrame.new(teleportPosition)
+        
+        -- Notify the user
+        print("Teleported to:", teleportPosition)
+        RedzLib:Notify("Teleport", "You have been teleported to Sama's location!")
+    end
+})
+
+-- Add a section in the "Easter Egg" tab
+EasterEggTab:AddSection({Name = "Rebirth | Yuma"})
+
+-- Add the "Yuma" button in the "Easter Egg" tab
+EasterEggTab:AddButton({
+    Name = "Yuma",
+    Description = "",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:WaitForChild("HumanoidRootPart")
+        
+        -- Teleport position
+        local teleportPosition = Vector3.new(2180, 218, 252)
+        
+        -- Teleport the player
+        hrp.CFrame = CFrame.new(teleportPosition)
+        
+        -- Notify the user
+        print("Teleported to:", teleportPosition)
+        RedzLib:Notify("Teleport", "You have been teleported to Yuma's location!")
+    end
+})
+
+-- Add a section in the "Easter Egg" tab
+EasterEggTab:AddSection({Name = "Rage | Netamo"})
+
+-- Add the "Sama" button in the "Easter Egg" tab
+EasterEggTab:AddButton({
+    Name = "Netamo",
+    Description = "",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:WaitForChild("HumanoidRootPart")
+        
+        -- Teleport position
+        local teleportPosition = Vector3.new(1157, 112, 465)
+        
+        -- Teleport the player
+        hrp.CFrame = CFrame.new(teleportPosition)
+        
+        -- Notify the user
+        print("Teleported to:", teleportPosition)
+        RedzLib:Notify("Teleport", "You have been teleported to Sama's location!")
+    end
+})
+
+-- Add a section in the "Easter Egg" tab
+EasterEggTab:AddSection({Name = "Jealousy | Enzukai"})
+
+-- Add the "Sama" button in the "Easter Egg" tab
+EasterEggTab:AddButton({
+    Name = "Enzukai",
+    Description = "",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:WaitForChild("HumanoidRootPart")
+        
+        -- Teleport position
+        local teleportPosition = Vector3.new(1722, 133, 831)
+        
+        -- Teleport the player
+        hrp.CFrame = CFrame.new(teleportPosition)
+        
+        -- Notify the user
+        print("Teleported to:", teleportPosition)
+        RedzLib:Notify("Teleport", "You have been teleported to Sama's location!")
+    end
+})
