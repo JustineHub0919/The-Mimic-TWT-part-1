@@ -135,22 +135,71 @@ Main:AddButton({
     end
 })
 
+-- Create the "Game" tab
 local Game = Window:MakeTab({"Auto Win", "Game"})
+
+-- Add section "Auto Finish" under the Game tab
+Game:AddSection({Name = "Auto Finish"})
 
 -- Auto Win Button
 Game:AddButton({
-    Name = "Auto Win", 
+    Name = "Auto Win",
     Description = "",
     Callback = function()
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
 
-        local targetPosition = Vector3.new(2530, 6, -1184)  -- Set the target position
-        character:SetPrimaryPartCFrame(CFrame.new(targetPosition))  -- Teleport the player
-
-        print("Auto Win: Teleported to", targetPosition)
+        -- Set the target position for teleportation
+        local targetPosition = Vector3.new(2530, 6, -1184)
+        
+        -- Check if the character has a HumanoidRootPart
+        if character:FindFirstChild("HumanoidRootPart") then
+            character:SetPrimaryPartCFrame(CFrame.new(targetPosition))  -- Teleport the player
+            print("Auto Win: Teleported to", targetPosition)
+        else
+            print("Auto Win: Could not teleport, HumanoidRootPart not found!")
+        end
     end
 })
+
+-- Add a section under "Game" for Auto Activation
+Game:AddSection({Name = "Auto Grab Scroll If Monster Nearby"})
+
+-- Auto Activation Toggle for Proximity Prompts
+local autoActivate = false  -- Toggle state (OFF by default)
+
+Game:AddToggle({
+    Name = "Get Scroll From Monster",
+    Description = "Auto Grab If Monster Is Nearby",
+    Default = false,
+    Callback = function(isEnabled)
+        autoActivate = isEnabled  -- Update the toggle state
+        if isEnabled then
+            print("Auto Activation is ON")
+        else
+            print("Auto Activation is OFF")
+        end
+    end
+})
+
+-- Function to trigger all enabled ProximityPrompts
+local function activateProximityPrompts()
+    for _, descendant in ipairs(workspace:GetDescendants()) do
+        if descendant:IsA("ProximityPrompt") and descendant.Enabled then
+            fireproximityprompt(descendant)
+        end
+    end
+end
+
+-- Continuous check for auto activation
+spawn(function()
+    while true do
+        wait(0.1)  -- Check every 0.1 seconds
+        if autoActivate then
+            activateProximityPrompts()  -- Activate proximity prompts when toggle is ON
+        end
+    end
+end)
 
 -- Create the "Easter Egg" tab
 local EasterEggTab = Window:MakeTab({"Easter Egg", "Star"})
